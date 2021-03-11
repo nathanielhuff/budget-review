@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Account History Review Tool</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+</head>
+<body>
+	<h1>Account History Review Tool</h1>
+	<p>
+		<label>
+			<input id="withdrawals-only" type="checkbox" checked>
+			Withdrawals Only?
+		</label>
+	</p>
+	<input type="file" name="file" id="file-input">
+	<p>
+		<button id="parse" type="button" disabled>
+			Parse
+		</button>
+		<button id="clear" type="button" disabled>
+			Clear File
+		</button>
+	</p>
+	<div id="vue-app">
+		<h2>{{ message }}</h2>
+		<h3 v-if="data">Data has been set!</h3>
+	</div>
+	<div id="categories"></div>
+	<script src="main.js"></script>
+</body>
+</html>

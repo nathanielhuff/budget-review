@@ -1,0 +1,15 @@
+table {
+	width: 100%;
+	border: 1px solid;
+	font-family: monospace;
+}
+table + table {
+	margin-top: 1em;
+}
+td {
+	padding: 2px;
+	border: 1px solid;
+}
+td.amount, td:last-child {
+	text-align: right;
+}
