@@ -10,6 +10,8 @@
         return new Date(value);
       },
       format: function (value) {
+        value = value.toISOString();
+        value = value.slice(0, value.indexOf('T'));
         return value;
       }
     },
@@ -49,10 +51,25 @@
       raw: 'Category',
       key: 'category',
       clean: function (value) {
+        value = value.split(' ').map(s => { return s[0].toUpperCase() + s.substr(1, s.length); }).join('');
+        value = value[0].toLowerCase() + value.substr(1, value.length);
         return value;
       },
       format: function (value) {
-        return value;
+        var s = '';
+
+        for (var i=0; i<value.length; i++) {
+          if (i === 0) {
+            s += value[i].toUpperCase();
+            continue;
+          } else if ( /^[A-Z]$/.test(value[i]) ) {
+            s += (' ' + value[i]);
+          } else {
+            s += value[i];
+          }
+        }
+
+        return s;
       }
     }
   ];
@@ -103,12 +120,6 @@
     }
 
     $('#parse, #clear').prop('disabled', true);
-
-    /*var $categories = $('#categories');
-
-    if ($categories.length) {
-      $categories.empty();
-    }*/
   }
 
   function withdrawalsOnly () {
@@ -142,7 +153,7 @@
 
     // filter out withdrawals
     if (withdrawalsOnly()) {
-      DATA = DATA.filter(d => d.transactionDescription.toLowerCase().indexOf('withdrawal') > -1);
+      DATA = DATA.filter(d => d.transactionDescription.toLowerCase().indexOf('withdrawal') > -1 && d.amount < 0);
     }
 
     // get categories
@@ -161,6 +172,7 @@
     // set vue data
     app.data = DATA;
     app.categories = CATEGORIES;
+    app.keys = MAP.map(m => { return { name: m.key, raw: m.raw } });
 
     if (DEBUG) {
       console.log("DATA", DATA);
@@ -176,26 +188,33 @@
     data: {
       data: null,
       categories: null,
-      message: 'Hello Vue!'
+      keys: null,
+      filters: null
     },
     methods: {
       categoryFilter: function (category) {
         return this.data.filter(function (row) {
           return row.category === category;
         });
+      },
+      rowValueFilter: function (key, value) {
+        return MAP.filter(m => m.key === key)[0].format(value);
+      },
+      categoryFormat: function (category) {
+        return MAP.filter(m => m.key === 'category')[0].format(category);
       }
     }
   });
 
-  /*Vue.component('category-table', {
-    data: function () {
-      return {
-        category: null,
-      }
-    },
-    template: '<h3>{{ category }}</h3>';
-  });*/
-
   if (DEBUG) console.log(app);
 
 })();
+
+/*
+[{
+  date:
+  transactionDescription:
+  amount:
+  category:
+}]
+*/

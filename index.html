@@ -26,17 +26,21 @@
 		</button>
 	</p>
 	<div id="vue-app">
-		<h2>{{ message }}</h2>
 		<h3 v-if="data">Data has been set!</h3>
 		<h3 v-if="categories">Categories have been set!</h3>
 		<div id="categories" v-if="categories">
 			<template v-for="category in categories">
-				<h3>{{ category }}</h3>
-				<table>
+				<h3>{{ categoryFormat(category) }}</h3>
+				<table :class="'category category-' + categoryFormat(category).toLowerCase().split(' ').join('-')">
+					<tr>
+						<th v-for="key in keys">
+							{{ key.raw }}
+						</th>
+					</tr>
 					<template v-for="row in categoryFilter(category)">
 						<tr>
-							<td v-for="col in row">
-								{{ col }}
+							<td v-for="(value, key) in row">
+								{{ rowValueFilter(key, value) }}
 							</td>
 						</tr>
 					</template>
