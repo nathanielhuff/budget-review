@@ -28,8 +28,22 @@
 	<div id="vue-app">
 		<h2>{{ message }}</h2>
 		<h3 v-if="data">Data has been set!</h3>
+		<h3 v-if="categories">Categories have been set!</h3>
+		<div id="categories" v-if="categories">
+			<template v-for="category in categories">
+				<h3>{{ category }}</h3>
+				<table>
+					<template v-for="row in categoryFilter(category)">
+						<tr>
+							<td v-for="col in row">
+								{{ col }}
+							</td>
+						</tr>
+					</template>
+				</table>
+			</template>
+		</div>
 	</div>
-	<div id="categories"></div>
 	<script src="main.js"></script>
 </body>
 </html>

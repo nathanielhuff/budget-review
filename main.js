@@ -7,7 +7,7 @@
       raw: 'Date',
       key: 'date',
       clean: function (value) {
-        return value;
+        return new Date(value);
       },
       format: function (value) {
         return value;
@@ -59,6 +59,7 @@
 
   // internal variables
   var DATA = [];
+  var CATEGORIES = [];
 
   // internal methods
   function init () {
@@ -139,14 +140,32 @@
 
     });
 
+    // filter out withdrawals
     if (withdrawalsOnly()) {
       DATA = DATA.filter(d => d.transactionDescription.toLowerCase().indexOf('withdrawal') > -1);
     }
 
+    // get categories
+    DATA.forEach(function (row) {
+      var category = row.category;
+
+      if (CATEGORIES.indexOf(category) === -1) {
+        if (category !== undefined) {
+          CATEGORIES.push(category);
+        } else console.log('Undefined category. Row data: ', row);
+      }
+    });
+
+    CATEGORIES.sort();
+
     // set vue data
     app.data = DATA;
+    app.categories = CATEGORIES;
 
-    if (DEBUG) console.log("DATA", DATA);
+    if (DEBUG) {
+      console.log("DATA", DATA);
+      console.log("CATEGORIES", CATEGORIES);
+    }
   }
 
   $(document).ready(init);
@@ -156,9 +175,26 @@
     el: '#vue-app',
     data: {
       data: null,
+      categories: null,
       message: 'Hello Vue!'
+    },
+    methods: {
+      categoryFilter: function (category) {
+        return this.data.filter(function (row) {
+          return row.category === category;
+        });
+      }
     }
   });
+
+  /*Vue.component('category-table', {
+    data: function () {
+      return {
+        category: null,
+      }
+    },
+    template: '<h3>{{ category }}</h3>';
+  });*/
 
   if (DEBUG) console.log(app);
 
