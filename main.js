@@ -174,6 +174,13 @@
     app.categories = CATEGORIES;
     app.keys = MAP.map(m => { return { name: m.key, raw: m.raw } });
 
+    var filters = {};
+    CATEGORIES.forEach(c => { filters[c] = ''; });
+    app.filters = filters;
+
+    var sum = 0.00;
+    app.sum = DATA.map(d => d.amount).reduce((a,b) => a + b, sum);
+
     if (DEBUG) {
       console.log("DATA", DATA);
       console.log("CATEGORIES", CATEGORIES);
@@ -189,19 +196,40 @@
       data: null,
       categories: null,
       keys: null,
-      filters: null
+      filters: null,
+      sum: 0.00
     },
     methods: {
-      categoryFilter: function (category) {
-        return this.data.filter(function (row) {
-          return row.category === category;
-        });
-      },
       rowValueFilter: function (key, value) {
         return MAP.filter(m => m.key === key)[0].format(value);
       },
       categoryFormat: function (category) {
         return MAP.filter(m => m.key === 'category')[0].format(category);
+      },
+      filteredRows: function (category) {
+        var _t = this;
+        return _t.data.filter(function (row) {
+          return row.category === category;
+        }).filter(function (row) {
+          return row.transactionDescription.toLowerCase().includes(_t.filters[category].toLowerCase());
+        });
+      },
+      filteredCategorySum: function (category, filteredRows) {
+        var _t = this;
+        var sum = 0.00;
+        var rows = (filteredRows) ? _t.filteredRows(category) : _t.data.filter(row => row.category === category);
+
+        sum = rows.map(row => row.amount).reduce((a,b) => a + b, sum);
+
+        return sum;
+      }
+    },
+    filters: {
+      sumFormat: function (value) {
+        return MAP.filter(m => m.key === 'amount')[0].format(value);
+      },
+      categoryAttribute: function (value) {
+        return value.toLowerCase().split(' ').join('-');
       }
     }
   });
@@ -209,12 +237,3 @@
   if (DEBUG) console.log(app);
 
 })();
-
-/*
-[{
-  date:
-  transactionDescription:
-  amount:
-  category:
-}]
-*/

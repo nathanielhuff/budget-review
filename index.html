@@ -26,18 +26,49 @@
 		</button>
 	</p>
 	<div id="vue-app">
-		<h3 v-if="data">Data has been set!</h3>
-		<h3 v-if="categories">Categories have been set!</h3>
+		<div id="category-summary" v-if="categories">
+			<h2>Category Summary</h2>
+			<table>
+				<tr>
+					<th>Category</th>
+					<th>Amount</th>
+				</tr>
+				<template v-for="category in categories">
+					<tr>
+						<td>
+							<a href="#">{{ categoryFormat(category) }}</a>
+						</td>
+						<td>{{ filteredCategorySum(category) | sumFormat }}</td>
+					</tr>
+				</template>
+				<tr>
+					<td>TOTAL</td>
+					<td>{{ sum | sumFormat }}</td>
+				</tr>
+			</table>
+		</div>
 		<div id="categories" v-if="categories">
 			<template v-for="category in categories">
-				<h3>{{ categoryFormat(category) }}</h3>
-				<table :class="'category category-' + categoryFormat(category).toLowerCase().split(' ').join('-')">
+				<h2>{{ categoryFormat(category) }}</h2>
+				<h3>{{ filteredCategorySum(category, true) | sumFormat }}</h3>
+				<table :class="'category category-' + categoryFormat(category) | categoryAttribute">
 					<tr>
 						<th v-for="key in keys">
 							{{ key.raw }}
 						</th>
 					</tr>
-					<template v-for="row in categoryFilter(category)">
+					<tr>
+						<th></th>
+						<th>
+							<label>
+								Filter
+								<input type="text" placeholder="Filter descriptions..." v-model="filters[category]">
+							</label>
+						</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<template v-for="row in filteredRows(category)">
 						<tr>
 							<td v-for="(value, key) in row">
 								{{ rowValueFilter(key, value) }}

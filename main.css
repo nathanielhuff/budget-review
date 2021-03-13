@@ -1,7 +1,9 @@
 table {
-	width: 100%;
 	border: 1px solid;
 	font-family: monospace;
+}
+table.category {
+	width: 100%;
 }
 table + table {
 	margin-top: 1em;
