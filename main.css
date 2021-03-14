@@ -15,3 +15,9 @@ td {
 td.amount, td:last-child {
 	text-align: right;
 }
+tr.total {
+	font-size: 20px;
+}
+#category-summary table {
+	font-size: 15px;
+}

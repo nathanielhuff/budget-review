@@ -7,6 +7,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zenscroll/4.0.2/zenscroll-min.js" integrity="sha512-u8AVZHNF3Fxvmevg9DJpoSCsc3vs1wr1S52S3XEIVIfIKxXHQexNxEj+fN+XyupzeLvIjPZLZBPmHZveEqhGqA==" crossorigin="anonymous"></script>
 </head>
 <body>
 	<h1>Account History Review Tool</h1>
@@ -36,12 +37,12 @@
 				<template v-for="category in categories">
 					<tr>
 						<td>
-							<a href="#">{{ categoryFormat(category) }}</a>
+							<a href="#" v-on:click.prevent.stop="scroll(category)">{{ categoryFormat(category) }}</a>
 						</td>
 						<td>{{ filteredCategorySum(category) | sumFormat }}</td>
 					</tr>
 				</template>
-				<tr>
+				<tr class="total">
 					<td>TOTAL</td>
 					<td>{{ sum | sumFormat }}</td>
 				</tr>
@@ -49,9 +50,9 @@
 		</div>
 		<div id="categories" v-if="categories">
 			<template v-for="category in categories">
-				<h2>{{ categoryFormat(category) }}</h2>
+				<h2 :id="categoryFormat(category) | categoryAttribute">{{ categoryFormat(category) }}</h2>
 				<h3>{{ filteredCategorySum(category, true) | sumFormat }}</h3>
-				<table :class="'category category-' + categoryFormat(category) | categoryAttribute">
+				<table class="category" :class="'category-' + categoryFormat(category) | categoryAttribute">
 					<tr>
 						<th v-for="key in keys">
 							{{ key.raw }}

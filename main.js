@@ -222,6 +222,9 @@
         sum = rows.map(row => row.amount).reduce((a,b) => a + b, sum);
 
         return sum;
+      },
+      scroll: function (id) {
+        zenscroll.to(document.getElementById(id));
       }
     },
     filters: {
