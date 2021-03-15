@@ -225,6 +225,9 @@
       },
       scroll: function (id) {
         zenscroll.to(document.getElementById(id));
+      },
+      clearTransactionFilter: function (category) {
+        this.filters[category] = '';
       }
     },
     filters: {

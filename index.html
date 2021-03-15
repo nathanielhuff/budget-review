@@ -54,24 +54,33 @@
 				<h3>{{ filteredCategorySum(category, true) | sumFormat }}</h3>
 				<table class="category" :class="'category-' + categoryFormat(category) | categoryAttribute">
 					<tr>
+						<th></th>
+						<th>
+							<table class="filter-table">
+								<tr>
+									<th>
+										<label class="filter-label" :for="'filter-field ' + categoryFormat(category) | categoryAttribute">Filter</label>
+									</th>
+									<th>
+										<input :id="'filter-field ' + categoryFormat(category) | categoryAttribute" class="filter-field" type="text" placeholder="Filter descriptions..." v-model="filters[category]">
+									</th>
+									<th>
+										<button class="clear-filter" type="button" v-on:click="clearTransactionFilter(category)" :disabled="!filters[category]">Clear</button>
+									</th>
+								</tr>
+							</table>
+						</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr>
 						<th v-for="key in keys">
 							{{ key.raw }}
 						</th>
 					</tr>
-					<tr>
-						<th></th>
-						<th>
-							<label>
-								Filter
-								<input type="text" placeholder="Filter descriptions..." v-model="filters[category]">
-							</label>
-						</th>
-						<th></th>
-						<th></th>
-					</tr>
 					<template v-for="row in filteredRows(category)">
 						<tr>
-							<td v-for="(value, key) in row">
+							<td :class="key" v-for="(value, key) in row">
 								{{ rowValueFilter(key, value) }}
 							</td>
 						</tr>

@@ -21,3 +21,13 @@ tr.total {
 #category-summary table {
 	font-size: 15px;
 }
+.filter-table {
+	width: 100%;
+	margin-bottom: 1em;
+}
+.filter-table th {
+	vertical-align: middle;
+}
+.filter-field, .clear-filter {
+	width: 100%;
+}
