@@ -8,6 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.6/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/zenscroll/4.0.2/zenscroll-min.js" integrity="sha512-u8AVZHNF3Fxvmevg9DJpoSCsc3vs1wr1S52S3XEIVIfIKxXHQexNxEj+fN+XyupzeLvIjPZLZBPmHZveEqhGqA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" />
 </head>
 <body>
 	<h1>Account History Review Tool</h1>
@@ -30,23 +32,35 @@
 		<div id="category-summary" v-if="categories">
 			<h2>Category Summary</h2>
 			<table>
-				<tr>
-					<th>Category</th>
-					<th>Amount</th>
-				</tr>
-				<template v-for="category in categories">
+				<thead>
 					<tr>
-						<td>
-							<a href="#" v-on:click.prevent.stop="scroll(category)">{{ categoryFormat(category) }}</a>
-						</td>
-						<td>{{ filteredCategorySum(category) | sumFormat }}</td>
+						<th>Category</th>
+						<th>Amount</th>
 					</tr>
-				</template>
-				<tr class="total">
-					<td>TOTAL</td>
-					<td>{{ sum | sumFormat }}</td>
-				</tr>
+				</thead>
+				<tbody>
+					<template v-for="category in categories">
+						<tr>
+							<td>
+								<a href="#" v-on:click.prevent.stop="scroll(category)">{{ categoryFormat(category) }}</a>
+							</td>
+							<td>{{ filteredCategorySum(category) | sumFormat }}</td>
+						</tr>
+					</template>
+					<tr class="total">
+						<td>TOTAL</td>
+						<td>{{ sum | sumFormat }}</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="2">
+							<button id="summary-chart-btn" type="button" v-on:click="makeSummaryChart()">Generate Chart</button>
+						</td>
+					</tr>
+				</tfoot>
 			</table>
+			<canvas id="summary-chart" height="300" width="300"></canvas>
 		</div>
 		<div id="categories" v-if="categories">
 			<template v-for="category in categories">

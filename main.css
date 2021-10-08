@@ -31,3 +31,6 @@ tr.total {
 .filter-field, .clear-filter {
 	width: 100%;
 }
+#summary-chart-btn {
+	width: 100%;
+}

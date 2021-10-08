@@ -228,6 +228,19 @@
       },
       clearTransactionFilter: function (category) {
         this.filters[category] = '';
+      },
+      makeSummaryChart: function () {
+        var _t = this;
+        var chart = new Chart ('summary-chart', {
+          type: 'pie',
+          data: {
+            datasets: [{
+              data: _t.categories.map(c => { return Math.abs(_t.filteredCategorySum(c)); }),
+              backgroundColor: _t.categories.map(function (c) { return '#'+Math.floor(Math.random()*16777215).toString(16); })
+            }],
+            labels: _t.categories.map(c => { return _t.categoryFormat(c); })
+          }
+        });
       }
     },
     filters: {
